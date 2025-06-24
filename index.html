@@ -2,172 +2,37 @@
 <html lang="sv">
 <head>
   <meta charset="UTF-8" />
-  <title>Schemaläggare med tabbar</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    .tabs {
-      display: flex;
-      border-bottom: 1px solid #ccc;
-      margin-bottom: 15px;
-      cursor: pointer;
-    }
-    .tab {
-      padding: 10px 20px;
-      border: 1px solid #ccc;
-      border-bottom: none;
-      background: #eee;
-      margin-right: 5px;
-      border-radius: 5px 5px 0 0;
-    }
-    .tab.active {
-      background: white;
-      font-weight: bold;
-    }
-    .tab-content {
-      border: 1px solid #ccc;
-      padding: 15px;
-      border-radius: 0 5px 5px 5px;
-    }
-    table { border-collapse: collapse; width: 100%; max-width: 900px; }
-    th, td { border: 1px solid #999; padding: 8px; text-align: center; }
-    input[type="text"] { width: 100%; box-sizing: border-box; }
-    button { margin-top: 15px; padding: 10px 20px; font-size: 16px; }
-    label { cursor: pointer; }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Schemahantering</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-  <h1>Schemaläggare</h1>
+  <h1>Schemahantering</h1>
 
   <div class="tabs">
-    <div class="tab active" data-tab="medarbetare">Medarbetare</div>
-    <div class="tab" data-tab="schema">Schema</div>
+    <button class="tab-button active" onclick="switchTab('dag')">Dag</button>
+    <button class="tab-button" onclick="switchTab('kvall')">Kväll</button>
+    <button class="tab-button" onclick="switchTab('natt')">Natt</button>
+    <button class="tab-button" onclick="switchTab('flex')">Flex/Bemanning</button>
   </div>
 
-  <div id="medarbetare" class="tab-content">
-    <h2>Lägg till medarbetare</h2>
-    <form id="addMedarbetareForm">
-      <label>
-        Namn:<br/>
-        <input type="text" id="medarbetareNamn" required />
-      </label>
-      <br/><br/>
-      <div id="balansCheckboxar">
-        <!-- Här genereras kryssrutor för balanser via JS -->
-      </div>
-      <br/>
-      <button type="submit">Lägg till medarbetare</button>
-    </form>
-
-    <h2>Lista på medarbetare</h2>
-    <table id="medarbetareTabell">
-      <thead>
-        <tr>
-          <th>Namn</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Medarbetare data genereras här -->
-      </tbody>
-    </table>
+  <div id="dag" class="tab-content active">
+    <h2>Dagpersonal</h2>
+    <div id="dag-list" class="employee-list"></div>
+  </div>
+  <div id="kvall" class="tab-content">
+    <h2>Kvällspersonal</h2>
+    <div id="kvall-list" class="employee-list"></div>
+  </div>
+  <div id="natt" class="tab-content">
+    <h2>Nattpersonal</h2>
+    <div id="natt-list" class="employee-list"></div>
+  </div>
+  <div id="flex" class="tab-content">
+    <h2>Flex/Bemanning</h2>
+    <div id="flex-list" class="employee-list"></div>
   </div>
 
-  <div id="schema" class="tab-content" style="display:none;">
-    <h2>Schema (kommer senare)</h2>
-    <p>Här kan vi senare bygga schemat baserat på medarbetardata.</p>
-  </div>
-
-  <script>
-    // Uppdaterade balansnamn
-    const balansNamn = [
-      "Maskering TS", "Kontrollering 1", "Kontrollering 2", "Pålast 1",
-      "Pålast 2", "Tork", "Avs 1", "Avs 2", "Avs 3", "Avplock",
-      "Sillar", "Takspoiler", "Inlagring", "Nedre Förlast", "Nedre Pålast",
-      "Nedre VTC", "Nedre Avs", "SLUTKONTROLL"
-    ];
-
-    let medarbetareLista = [];
-
-    function visaBalansCheckboxar() {
-      const container = document.getElementById('balansCheckboxar');
-      container.innerHTML = '';
-      balansNamn.forEach((balans, i) => {
-        const id = 'balansChk' + i;
-        const label = document.createElement('label');
-        label.innerHTML = `<input type="checkbox" id="${id}" value="${balans}" checked> ${balans}`;
-        container.appendChild(label);
-        container.appendChild(document.createElement('br'));
-      });
-    }
-
-    function uppdateraMedarbetareTabellHeader() {
-      const theadTr = document.querySelector('#medarbetareTabell thead tr');
-      theadTr.innerHTML = '<th>Namn</th>';
-      balansNamn.forEach(balans => {
-        const th = document.createElement('th');
-        th.textContent = balans;
-        theadTr.appendChild(th);
-      });
-    }
-
-    function visaMedarbetareLista() {
-      const tbody = document.querySelector('#medarbetareTabell tbody');
-      tbody.innerHTML = '';
-      medarbetareLista.forEach(med => {
-        const tr = document.createElement('tr');
-        const tdNamn = document.createElement('td');
-        tdNamn.textContent = med.namn;
-        tr.appendChild(tdNamn);
-
-        med.behorigheter.forEach(b => {
-          const td = document.createElement('td');
-          td.textContent = b ? '✓' : '';
-          tr.appendChild(td);
-        });
-
-        tbody.appendChild(tr);
-      });
-    }
-
-    document.querySelectorAll('.tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-
-        document.querySelectorAll('.tab-content').forEach(tc => tc.style.display = 'none');
-        const tabId = tab.getAttribute('data-tab');
-        document.getElementById(tabId).style.display = 'block';
-      });
-    });
-
-    visaBalansCheckboxar();
-    uppdateraMedarbetareTabellHeader();
-
-    document.getElementById('addMedarbetareForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const namnInput = document.getElementById('medarbetareNamn');
-      const namn = namnInput.value.trim();
-      if (!namn) {
-        alert('Ange ett namn!');
-        return;
-      }
-
-      const behOrigheter = [];
-      balansNamn.forEach((balans, i) => {
-        const chk = document.getElementById('balansChk' + i);
-        behOrigheter.push(chk.checked);
-      });
-
-      medarbetareLista.push({ namn, behorigheter: behOrigheter });
-      namnInput.value = '';
-      balansNamn.forEach((balans, i) => {
-        document.getElementById('balansChk' + i).checked = true;
-      });
-
-      visaMedarbetareLista();
-    });
-
-    visaMedarbetareLista();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
