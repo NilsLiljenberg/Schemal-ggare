@@ -2,127 +2,182 @@
 <html lang="sv">
 <head>
   <meta charset="UTF-8" />
-  <title>Schemaläggare</title>
+  <title>Schemaläggare med tabbar</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #ccc;
+      margin-bottom: 15px;
+      cursor: pointer;
+    }
+    .tab {
+      padding: 10px 20px;
+      border: 1px solid #ccc;
+      border-bottom: none;
+      background: #eee;
+      margin-right: 5px;
+      border-radius: 5px 5px 0 0;
+    }
+    .tab.active {
+      background: white;
+      font-weight: bold;
+    }
+    .tab-content {
+      border: 1px solid #ccc;
+      padding: 15px;
+      border-radius: 0 5px 5px 5px;
+    }
     table { border-collapse: collapse; width: 100%; max-width: 900px; }
     th, td { border: 1px solid #999; padding: 8px; text-align: center; }
     input[type="text"] { width: 100%; box-sizing: border-box; }
     button { margin-top: 15px; padding: 10px 20px; font-size: 16px; }
+    label { cursor: pointer; }
   </style>
 </head>
 <body>
 
-  <h1>Schemaläggare - Redigerbara namn & balanser</h1>
+  <h1>Schemaläggare</h1>
 
-  <table id="schemaTabell">
-    <thead>
-      <tr>
-        <th>Person</th>
-        <!-- Här lägger vi in 18 balanser -->
-        <th><input type="text" class="balans-namn" value="Balans 1" /></th>
-        <th><input type="text" class="balans-namn" value="Balans 2" /></th>
-        <th><input type="text" class="balans-namn" value="Balans 3" /></th>
-        <th><input type="text" class="balans-namn" value="Balans 4" /></th>
-        <th><input type="text" class="balans-namn" value="Balans 5" /></th>
-        <th><input type="text" class="balans-namn" value="Balans 6" /></th>
-        <th><input type="text" class="balans-namn" value="Balans 7" /></th>
-        <th><input type="text" class="balans-namn" value="Balans 8" /></th>
-        <th><input type="text" class="balans-namn" value="Balans 9" /></th>
-        <th><input type="text" class="balans-namn" value="Balans 10" /></th>
-        <th><input type="text" class="balans-namn" value="Balans 11" /></th>
-        <th><input type="text" class="balans-namn" value="Balans 12" /></th>
-        <th><input type="text" class="balans-namn" value="Balans 13" /></th>
-        <th><input type="text" class="balans-namn" value="Balans 14" /></th>
-        <th><input type="text" class="balans-namn" value="Balans 15" /></th>
-        <th><input type="text" class="balans-namn" value="Balans 16" /></th>
-        <th><input type="text" class="balans-namn" value="Balans 17" /></th>
-        <th><input type="text" class="balans-namn" value="Balans 18" /></th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Exempelpersoner -->
-      <tr>
-        <td><input type="text" class="person-namn" value="Nils Liljenberg" /></td>
-        <!-- Kryssrutor för behörighet -->
-        <td><input type="checkbox" checked></td>
-        <td><input type="checkbox" checked></td>
-        <td><input type="checkbox"></td>
-        <td><input type="checkbox"></td>
-        <td><input type="checkbox" checked></td>
-        <td><input type="checkbox" checked></td>
-        <td><input type="checkbox"></td>
-        <td><input type="checkbox" checked></td>
-        <td><input type="checkbox"></td>
-        <td><input type="checkbox" checked></td>
-        <td><input type="checkbox"></td>
-        <td><input type="checkbox" checked></td>
-        <td><input type="checkbox"></td>
-        <td><input type="checkbox"></td>
-        <td><input type="checkbox" checked></td>
-        <td><input type="checkbox"></td>
-        <td><input type="checkbox"></td>
-        <td><input type="checkbox" checked></td>
-      </tr>
-      <tr>
-        <td><input type="text" class="person-namn" value="Anna Svensson" /></td>
-        <td><input type="checkbox" checked></td>
-        <td><input type="checkbox"></td>
-        <td><input type="checkbox" checked></td>
-        <td><input type="checkbox"></td>
-        <td><input type="checkbox"></td>
-        <td><input type="checkbox" checked></td>
-        <td><input type="checkbox"></td>
-        <td><input type="checkbox"></td>
-        <td><input type="checkbox" checked></td>
-        <td><input type="checkbox"></td>
-        <td><input type="checkbox"></td>
-        <td><input type="checkbox" checked></td>
-        <td><input type="checkbox"></td>
-        <td><input type="checkbox"></td>
-        <td><input type="checkbox" checked></td>
-        <td><input type="checkbox"></td>
-        <td><input type="checkbox"></td>
-        <td><input type="checkbox"></td>
-      </tr>
-      <!-- Fler personer här -->
-    </tbody>
-  </table>
+  <div class="tabs">
+    <div class="tab active" data-tab="medarbetare">Medarbetare</div>
+    <div class="tab" data-tab="schema">Schema</div>
+  </div>
 
-  <button id="visaNamnBtn">Visa namn & behörigheter i konsolen</button>
+  <div id="medarbetare" class="tab-content">
+    <h2>Lägg till medarbetare</h2>
+    <form id="addMedarbetareForm">
+      <label>
+        Namn:<br/>
+        <input type="text" id="medarbetareNamn" required />
+      </label>
+      <br/><br/>
+      <div id="balansCheckboxar">
+        <!-- Här genereras kryssrutor för balanser via JS -->
+      </div>
+      <br/>
+      <button type="submit">Lägg till medarbetare</button>
+    </form>
+
+    <h2>Lista på medarbetare</h2>
+    <table id="medarbetareTabell">
+      <thead>
+        <tr>
+          <th>Namn</th>
+          <!-- Balans-namn kolumner genereras via JS -->
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Medarbetare data genereras här -->
+      </tbody>
+    </table>
+  </div>
+
+  <div id="schema" class="tab-content" style="display:none;">
+    <h2>Schema (kommer senare)</h2>
+    <p>Här kan vi senare bygga schemat baserat på medarbetardata.</p>
+  </div>
 
   <script>
-    // Funktion för att läsa personnamn
-    function getPersonNamn() {
-      const inputs = document.querySelectorAll('.person-namn');
-      return Array.from(inputs).map(input => input.value.trim());
+    // Konfigurera balansnamn (kan sen göras redigerbara)
+    const balansNamn = [];
+    for(let i=1; i<=18; i++) {
+      balansNamn.push('Balans ' + i);
     }
 
-    // Funktion för att läsa balansnamn
-    function getBalansNamn() {
-      const inputs = document.querySelectorAll('.balans-namn');
-      return Array.from(inputs).map(input => input.value.trim());
-    }
+    // Data: alla medarbetare med behörigheter lagras här
+    let medarbetareLista = [];
 
-    // Funktion för att läsa behörigheter: returnerar array av objekt { person: 'Namn', behorigheter: [true, false, ...] }
-    function getBehorigheter() {
-      const rows = document.querySelectorAll('#schemaTabell tbody tr');
-      return Array.from(rows).map(row => {
-        const personNamn = row.querySelector('.person-namn').value.trim();
-        const checks = row.querySelectorAll('input[type=checkbox]');
-        const behorigheter = Array.from(checks).map(cb => cb.checked);
-        return { person: personNamn, behorigheter };
+    // Visa balanser som kryssrutor i formuläret
+    function visaBalansCheckboxar() {
+      const container = document.getElementById('balansCheckboxar');
+      container.innerHTML = '';
+      balansNamn.forEach((balans, i) => {
+        const id = 'balansChk' + i;
+        const label = document.createElement('label');
+        label.innerHTML = `<input type="checkbox" id="${id}" value="${balans}" checked> ${balans}`;
+        container.appendChild(label);
+        container.appendChild(document.createTextNode(' '));
       });
     }
 
-    // Event för testknappen
-    document.getElementById('visaNamnBtn').addEventListener('click', () => {
-      console.log('Personnamn:', getPersonNamn());
-      console.log('Balansnamn:', getBalansNamn());
-      console.log('Behörigheter:', getBehorigheter());
-      alert('Kolla webbläsarens konsol (F12) för att se namn och behörigheter!');
-    });
-  </script>
+    // Uppdatera tabellhuvud för medarbetare-tabellen
+    function uppdateraMedarbetareTabellHeader() {
+      const theadTr = document.querySelector('#medarbetareTabell thead tr');
+      theadTr.innerHTML = '<th>Namn</th>';
+      balansNamn.forEach(balans => {
+        const th = document.createElement('th');
+        th.textContent = balans;
+        theadTr.appendChild(th);
+      });
+    }
 
+    // Visa medarbetare i tabellen
+    function visaMedarbetareLista() {
+      const tbody = document.querySelector('#medarbetareTabell tbody');
+      tbody.innerHTML = '';
+      medarbetareLista.forEach(med => {
+        const tr = document.createElement('tr');
+        const tdNamn = document.createElement('td');
+        tdNamn.textContent = med.namn;
+        tr.appendChild(tdNamn);
+
+        med.behorigheter.forEach(b => {
+          const td = document.createElement('td');
+          td.textContent = b ? '✓' : '';
+          tr.appendChild(td);
+        });
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Hantera tabb-klick för att byta innehåll
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        document.querySelectorAll('.tab-content').forEach(tc => tc.style.display = 'none');
+        const tabId = tab.getAttribute('data-tab');
+        document.getElementById(tabId).style.display = 'block';
+      });
+    });
+
+    // Initiera
+    visaBalansCheckboxar();
+    uppdateraMedarbetareTabellHeader();
+
+    // Lägg till medarbetare vid formulärsubmit
+    document.getElementById('addMedarbetareForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const namnInput = document.getElementById('medarbetareNamn');
+      const namn = namnInput.value.trim();
+      if(!namn) {
+        alert('Ange ett namn!');
+        return;
+      }
+      // Hämta kryssrutor och skapa behörighetsarray
+      const behOrigheter = [];
+      balansNamn.forEach((balans, i) => {
+        const chk = document.getElementById('balansChk' + i);
+        behOrigheter.push(chk.checked);
+      });
+
+      // Lägg till ny medarbetare i listan
+      medarbetareLista.push({ namn, behorigheter: behOrigheter });
+      // Rensa namn-input och kryssrutor
+      namnInput.value = '';
+      balansNamn.forEach((balans, i) => {
+        document.getElementById('balansChk' + i).checked = true;
+      });
+
+      visaMedarbetareLista();
+    });
+
+    // Visa initialt tom lista
+    visaMedarbetareLista();
+
+  </script>
 </body>
 </html>
