@@ -2,12 +2,29 @@
 <html lang="sv">
 <head>
   <meta charset="UTF-8" />
-  <title>SchemaSystemet</title>
+  <title>Schemaläggare</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>SchemaSystemet</h1>
-  <p>Välj personal, skapa schema och exportera till Excel.</p>
+  <h1>Schemaläggare</h1>
+
+  <section id="person-list">
+    <h2>Personal & Behörighet</h2>
+    <div id="person-container"></div>
+  </section>
+
+  <section id="absence-section">
+    <h2>Frånvarande / Ersättare</h2>
+    <div id="absence-container"></div>
+  </section>
+
+  <button id="generate-btn">Skapa schema</button>
+
+  <section id="schedule-output">
+    <h2>Schema</h2>
+    <div id="schedule-container"></div>
+  </section>
+
   <script src="script.js"></script>
 </body>
 </html>
