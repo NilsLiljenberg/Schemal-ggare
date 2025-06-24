@@ -1,75 +1,79 @@
-const employees = [
-  {
-    name: "Anna Persson",
-    balances: ["Maskering TS", "Kontrollering 1", "Tork"],
-    shift: "dag",
-  },
-  {
-    name: "Johan Eriksson",
-    balances: ["Avs 1", "Avs 2", "Avs 3", "Avplock"],
-    shift: "kvall",
-  },
-  {
-    name: "Sara Lind",
-    balances: ["Sillar", "Takspoiler", "Inlagring"],
-    shift: "natt",
-  },
-  {
-    name: "Mikael Holm",
-    balances: ["Nedre Förlast", "Nedre Pålast", "SLUTKONTROLL"],
-    shift: "flex",
-  }
-];
+let employees = [];
+
+function switchMainTab(tabName) {
+  document.querySelectorAll('.main-tab-content').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.main-tab-button').forEach(btn => btn.classList.remove('active'));
+  document.getElementById(tabName).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function switchTab(shift) {
+  document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+  document.getElementById(shift).classList.add('active');
+  event.target.classList.add('active');
+  renderEmployees();
+}
+
+function addEmployee() {
+  const name = document.getElementById("nameInput").value.trim();
+  const shift = document.getElementById("shiftInput").value;
+  const balances = document.getElementById("balancesInput").value.split(',').map(b => b.trim()).filter(b => b);
+
+  if (!name || balances.length === 0) return alert("Fyll i alla fält!");
+
+  employees.push({ name, shift, balances });
+  document.getElementById("nameInput").value = "";
+  document.getElementById("balancesInput").value = "";
+  renderEmployees();
+}
 
 function renderEmployees() {
-  const shiftContainers = {
-    dag: document.getElementById("dag-list"),
-    kvall: document.getElementById("kvall-list"),
-    natt: document.getElementById("natt-list"),
-    flex: document.getElementById("flex-list"),
-  };
+  ["dag", "kvall", "natt", "flex"].forEach(shift => {
+    const container = document.getElementById(shift);
+    container.innerHTML = "";
 
-  for (let shift in shiftContainers) {
-    shiftContainers[shift].innerHTML = "";
-  }
+    const list = document.createElement("div");
+    list.className = "employee-list";
 
-  employees.forEach((emp, index) => {
-    const container = shiftContainers[emp.shift];
-    if (!container) return;
+    employees.filter(e => e.shift === shift).forEach((emp, index) => {
+      const div = document.createElement("div");
+      div.className = "employee";
 
-    const empDiv = document.createElement("div");
-    empDiv.className = "employee";
+      div.innerHTML = `
+        <strong>${emp.name}</strong>
+        <ul>${emp.balances.map(b => `<li>${b}</li>`).join("")}</ul>
+        <div class="actions">
+          <button onclick="editEmployee(${index})">Ändra</button>
+          <button onclick="deleteEmployee(${index})">Ta bort</button>
+        </div>
+      `;
 
-    const header = document.createElement("div");
-    header.className = "employee-header";
-    header.innerText = emp.name;
-    header.onclick = () => {
-      body.style.display = body.style.display === "block" ? "none" : "block";
-    };
+      list.appendChild(div);
+    });
 
-    const body = document.createElement("div");
-    body.className = "employee-body";
-    body.innerHTML = `<strong>Utbildad på:</strong><ul>${emp.balances.map(b => `<li>${b}</li>`).join("")}</ul>`;
-
-    empDiv.appendChild(header);
-    empDiv.appendChild(body);
-    container.appendChild(empDiv);
+    container.appendChild(list);
   });
 }
 
-function switchTab(tabName) {
-  const tabs = document.querySelectorAll(".tab-content");
-  const buttons = document.querySelectorAll(".tab-button");
+function editEmployee(index) {
+  const emp = employees[index];
+  const newName = prompt("Ändra namn:", emp.name);
+  if (!newName) return;
 
-  tabs.forEach(tab => {
-    tab.classList.remove("active");
-  });
-  buttons.forEach(btn => {
-    btn.classList.remove("active");
-  });
+  const newBalances = prompt("Ändra balanser (kommaseparerat):", emp.balances.join(","));
+  if (!newBalances) return;
 
-  document.getElementById(tabName).classList.add("active");
-  event.target.classList.add("active");
+  employees[index].name = newName.trim();
+  employees[index].balances = newBalances.split(",").map(b => b.trim()).filter(b => b);
+  renderEmployees();
+}
+
+function deleteEmployee(index) {
+  if (confirm("Vill du ta bort personen?")) {
+    employees.splice(index, 1);
+    renderEmployees();
+  }
 }
 
 renderEmployees();
