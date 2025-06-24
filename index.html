@@ -3,28 +3,126 @@
 <head>
   <meta charset="UTF-8" />
   <title>Schemaläggare</title>
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    table { border-collapse: collapse; width: 100%; max-width: 900px; }
+    th, td { border: 1px solid #999; padding: 8px; text-align: center; }
+    input[type="text"] { width: 100%; box-sizing: border-box; }
+    button { margin-top: 15px; padding: 10px 20px; font-size: 16px; }
+  </style>
 </head>
 <body>
-  <h1>Schemaläggare</h1>
 
-  <section id="person-list">
-    <h2>Personal & Behörighet</h2>
-    <div id="person-container"></div>
-  </section>
+  <h1>Schemaläggare - Redigerbara namn & balanser</h1>
 
-  <section id="absence-section">
-    <h2>Frånvarande / Ersättare</h2>
-    <div id="absence-container"></div>
-  </section>
+  <table id="schemaTabell">
+    <thead>
+      <tr>
+        <th>Person</th>
+        <!-- Här lägger vi in 18 balanser -->
+        <th><input type="text" class="balans-namn" value="Balans 1" /></th>
+        <th><input type="text" class="balans-namn" value="Balans 2" /></th>
+        <th><input type="text" class="balans-namn" value="Balans 3" /></th>
+        <th><input type="text" class="balans-namn" value="Balans 4" /></th>
+        <th><input type="text" class="balans-namn" value="Balans 5" /></th>
+        <th><input type="text" class="balans-namn" value="Balans 6" /></th>
+        <th><input type="text" class="balans-namn" value="Balans 7" /></th>
+        <th><input type="text" class="balans-namn" value="Balans 8" /></th>
+        <th><input type="text" class="balans-namn" value="Balans 9" /></th>
+        <th><input type="text" class="balans-namn" value="Balans 10" /></th>
+        <th><input type="text" class="balans-namn" value="Balans 11" /></th>
+        <th><input type="text" class="balans-namn" value="Balans 12" /></th>
+        <th><input type="text" class="balans-namn" value="Balans 13" /></th>
+        <th><input type="text" class="balans-namn" value="Balans 14" /></th>
+        <th><input type="text" class="balans-namn" value="Balans 15" /></th>
+        <th><input type="text" class="balans-namn" value="Balans 16" /></th>
+        <th><input type="text" class="balans-namn" value="Balans 17" /></th>
+        <th><input type="text" class="balans-namn" value="Balans 18" /></th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Exempelpersoner -->
+      <tr>
+        <td><input type="text" class="person-namn" value="Nils Liljenberg" /></td>
+        <!-- Kryssrutor för behörighet -->
+        <td><input type="checkbox" checked></td>
+        <td><input type="checkbox" checked></td>
+        <td><input type="checkbox"></td>
+        <td><input type="checkbox"></td>
+        <td><input type="checkbox" checked></td>
+        <td><input type="checkbox" checked></td>
+        <td><input type="checkbox"></td>
+        <td><input type="checkbox" checked></td>
+        <td><input type="checkbox"></td>
+        <td><input type="checkbox" checked></td>
+        <td><input type="checkbox"></td>
+        <td><input type="checkbox" checked></td>
+        <td><input type="checkbox"></td>
+        <td><input type="checkbox"></td>
+        <td><input type="checkbox" checked></td>
+        <td><input type="checkbox"></td>
+        <td><input type="checkbox"></td>
+        <td><input type="checkbox" checked></td>
+      </tr>
+      <tr>
+        <td><input type="text" class="person-namn" value="Anna Svensson" /></td>
+        <td><input type="checkbox" checked></td>
+        <td><input type="checkbox"></td>
+        <td><input type="checkbox" checked></td>
+        <td><input type="checkbox"></td>
+        <td><input type="checkbox"></td>
+        <td><input type="checkbox" checked></td>
+        <td><input type="checkbox"></td>
+        <td><input type="checkbox"></td>
+        <td><input type="checkbox" checked></td>
+        <td><input type="checkbox"></td>
+        <td><input type="checkbox"></td>
+        <td><input type="checkbox" checked></td>
+        <td><input type="checkbox"></td>
+        <td><input type="checkbox"></td>
+        <td><input type="checkbox" checked></td>
+        <td><input type="checkbox"></td>
+        <td><input type="checkbox"></td>
+        <td><input type="checkbox"></td>
+      </tr>
+      <!-- Fler personer här -->
+    </tbody>
+  </table>
 
-  <button id="generate-btn">Skapa schema</button>
+  <button id="visaNamnBtn">Visa namn & behörigheter i konsolen</button>
 
-  <section id="schedule-output">
-    <h2>Schema</h2>
-    <div id="schedule-container"></div>
-  </section>
+  <script>
+    // Funktion för att läsa personnamn
+    function getPersonNamn() {
+      const inputs = document.querySelectorAll('.person-namn');
+      return Array.from(inputs).map(input => input.value.trim());
+    }
 
-  <script src="script.js"></script>
+    // Funktion för att läsa balansnamn
+    function getBalansNamn() {
+      const inputs = document.querySelectorAll('.balans-namn');
+      return Array.from(inputs).map(input => input.value.trim());
+    }
+
+    // Funktion för att läsa behörigheter: returnerar array av objekt { person: 'Namn', behorigheter: [true, false, ...] }
+    function getBehorigheter() {
+      const rows = document.querySelectorAll('#schemaTabell tbody tr');
+      return Array.from(rows).map(row => {
+        const personNamn = row.querySelector('.person-namn').value.trim();
+        const checks = row.querySelectorAll('input[type=checkbox]');
+        const behorigheter = Array.from(checks).map(cb => cb.checked);
+        return { person: personNamn, behorigheter };
+      });
+    }
+
+    // Event för testknappen
+    document.getElementById('visaNamnBtn').addEventListener('click', () => {
+      console.log('Personnamn:', getPersonNamn());
+      console.log('Balansnamn:', getBalansNamn());
+      console.log('Behörigheter:', getBehorigheter());
+      alert('Kolla webbläsarens konsol (F12) för att se namn och behörigheter!');
+    });
+  </script>
+
 </body>
 </html>
