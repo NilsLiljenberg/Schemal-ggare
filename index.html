@@ -9,28 +9,40 @@
 <body>
   <h1>Schemahantering</h1>
 
-  <div class="tabs">
-    <button class="tab-button active" onclick="switchTab('dag')">Dag</button>
-    <button class="tab-button" onclick="switchTab('kvall')">Kväll</button>
-    <button class="tab-button" onclick="switchTab('natt')">Natt</button>
-    <button class="tab-button" onclick="switchTab('flex')">Flex/Bemanning</button>
+  <div class="main-tabs">
+    <button class="main-tab-button active" onclick="switchMainTab('add')">Lägg till</button>
+    <button class="main-tab-button" onclick="switchMainTab('schedule')">Skapa schema</button>
   </div>
 
-  <div id="dag" class="tab-content active">
-    <h2>Dagpersonal</h2>
-    <div id="dag-list" class="employee-list"></div>
+  <div id="add" class="main-tab-content active">
+    <div class="sub-tabs">
+      <button class="tab-button active" onclick="switchTab('dag')">Dag</button>
+      <button class="tab-button" onclick="switchTab('kvall')">Kväll</button>
+      <button class="tab-button" onclick="switchTab('natt')">Natt</button>
+      <button class="tab-button" onclick="switchTab('flex')">Flex/Bemanning</button>
+    </div>
+
+    <div class="form-section">
+      <h3>Lägg till medarbetare</h3>
+      <input type="text" id="nameInput" placeholder="Namn" />
+      <select id="shiftInput">
+        <option value="dag">Dag</option>
+        <option value="kvall">Kväll</option>
+        <option value="natt">Natt</option>
+        <option value="flex">Flex/Bemanning</option>
+      </select>
+      <input type="text" id="balancesInput" placeholder="Balanser (kommaseparerat)" />
+      <button onclick="addEmployee()">Lägg till</button>
+    </div>
+
+    <div id="dag" class="tab-content active"></div>
+    <div id="kvall" class="tab-content"></div>
+    <div id="natt" class="tab-content"></div>
+    <div id="flex" class="tab-content"></div>
   </div>
-  <div id="kvall" class="tab-content">
-    <h2>Kvällspersonal</h2>
-    <div id="kvall-list" class="employee-list"></div>
-  </div>
-  <div id="natt" class="tab-content">
-    <h2>Nattpersonal</h2>
-    <div id="natt-list" class="employee-list"></div>
-  </div>
-  <div id="flex" class="tab-content">
-    <h2>Flex/Bemanning</h2>
-    <div id="flex-list" class="employee-list"></div>
+
+  <div id="schedule" class="main-tab-content">
+    <h2>Här kommer funktionen för att skapa schema</h2>
   </div>
 
   <script src="script.js"></script>
