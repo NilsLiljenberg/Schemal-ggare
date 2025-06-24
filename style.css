@@ -1,62 +1,63 @@
 body {
-  font-family: Arial, sans-serif;
-  margin: 2rem;
-  background: #f9f9f9;
-  color: #222;
+  font-family: sans-serif;
+  margin: 20px;
+  background: #f4f4f4;
+  color: #333;
 }
 
-h1, h2 {
-  color: #0055aa;
+h1 {
+  text-align: center;
 }
 
-#person-list, #absence-section {
-  margin-bottom: 2rem;
-  padding: 1rem;
-  background: #ffffff;
-  border-radius: 6px;
+.tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.tab-button {
+  padding: 10px 20px;
+  margin: 0 5px;
+  border: none;
+  background: #ccc;
+  cursor: pointer;
+}
+
+.tab-button.active {
+  background: #666;
+  color: white;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.employee-list {
+  max-width: 600px;
+  margin: auto;
+}
+
+.employee {
+  background: white;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  overflow: hidden;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.person-row, .absence-row {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.person-name {
-  width: 150px;
+.employee-header {
+  padding: 10px;
+  cursor: pointer;
+  background: #eee;
   font-weight: bold;
 }
 
-.checkbox-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  max-width: 800px;
-}
-
-.checkbox-container label {
-  font-size: 0.8rem;
-  margin-right: 10px;
-}
-
-#generate-btn {
-  padding: 10px 20px;
-  font-size: 1rem;
-  cursor: pointer;
-  margin-bottom: 1rem;
-}
-
-#schedule-output {
-  margin-top: 2rem;
-}
-
-#schedule-container {
-  margin-top: 1rem;
-  white-space: pre-wrap;
-  background: #fff;
-  padding: 1rem;
-  border-radius: 6px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+.employee-body {
+  display: none;
+  padding: 10px;
+  border-top: 1px solid #ddd;
 }
